@@ -1,2 +1,2 @@
 # koronademo
-Mainly for practising how to use git
+Mainly for practising how to use git.
