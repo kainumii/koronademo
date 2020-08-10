@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">   
+<head>
+     <style type="text/css">
+        #flot-placeholder{width:1200px;height:300px;}        
+    </style>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="http://www.pureexample.com/js/flot/excanvas.min.js"></script><![endif]-->
+    <script type="text/javascript" src="http://www.pureexample.com/js/lib/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://www.pureexample.com/js/flot/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="http://www.pureexample.com/js/flot/jquery.flot.axislabels.js"></script>
+	<script type="text/javascript">
+		
+		var total = 0;
+		var last;
+		var tmp;
+		var d = new Date();
+		var laskuri = 0;
+		
+		var now = new Date();
+		now = now.getTime();
+		
+		var serie;
+		
+        var testdata = [];
+		
+		var currentDate;
+ 
+        var options = {
+            series: {
+				label: "MOI!",
+                lines: { show: true },
+                points: {
+                    radius: 1,
+                    show: true
+                }
+            },
+			xaxis: {
+				mode: "time", 
+				tickSize: [1, "day"], 
+				axisLabel: "Koronatapaukset", 
+				axisLabelFontFamily: 'Verdana, Arial', axisLabelUseCanvas: true,
+				axisLabelPadding: 25, 
+				axisLabelFontSizePixels: 16
+			}
+        };
+ 
+        $(document).ready(function () {
+			var API = "https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2";
+			$.getJSON(API).done(function(data) {
+				$.each(data.confirmed, function(i, confirmed) {
+				
+					if(i < 25)
+					{
+						total++; 
+											
+						laskuri++;
+						pvm = new Date(confirmed.date).getTime();
+						console.log("pvm: " + pvm);
+						
+						uusi_array = [pvm, laskuri];
+						
+						testdata.push(uusi_array);
+							
+										
+						
+						<!-- laskuri = 0; -->
+						
+						var talteen = pvm;
+					}
+							
+				});
+							
+				
+				<!-- var data = [ [y2, 75], [y, 35], [new Date(last).getTime(), 100] ]; -->
+			
+				var dataset = [{label: "", data: testdata}];
+		
+				$("#total").append("Yhteensä tapauksia: " + total);
+				$.plot($("#flot-placeholder"), dataset, options);
+			});
+			
+			
+			
+			
+        });
+    </script>
+</head>
+<body>
+    <div id="flot-placeholder"></div>
+	<div id="total"></div>
+</body>
+</html> 
